@@ -3,7 +3,7 @@
 // VGA verilog template
 // Author:  Da Cheng
 //////////////////////////////////////////////////////////////////////////////////
-module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR
+module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR,
 	St_ce_bar, St_rp_bar, Mt_ce_bar, Mt_St_oe_bar, Mt_St_we_bar,
 	An0, An1, An2, An3, Ca, Cb, Cc, Cd, Ce, Cf, Cg, Dp,
 	LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7);
@@ -53,8 +53,10 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 		begin
 			Xposition_block <= Xposition_block + 1;
 			if(reset)
+				begin
 				Yposition_player<=240;  // middle of y axis
 				Xposition_block <= 0;   // start on far left of the screen
+				end
 			else if(btnD && ~btnU)
 				Yposition_player<=Yposition_player+2;
 			else if(btnU && ~btnD)
@@ -65,7 +67,7 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 
 	wire R = CounterY>=(Yposition_player-10) && CounterY<=(Yposition_player+10) && CounterX[8:5]==7;
 	wire G = CounterX>(0 + Xposition_block) && CounterX<(20 + Xposition_block) && CounterY[5:3]==7;
-	wire B = 0
+	wire B = 0;
 	
 	always @(posedge clk)
 	begin
