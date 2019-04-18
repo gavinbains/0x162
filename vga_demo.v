@@ -116,7 +116,7 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	assign SSD3 = 4'b1111;
 	assign SSD2 = 4'b1111;
 	assign SSD1 = 4'b1111;
-	assign SSD0 = position[3:0];
+	assign SSD0 = 4'b1111;
 	
 	// need a scan clk for the seven segment display 
 	// 191Hz (50MHz / 2^18) works well
