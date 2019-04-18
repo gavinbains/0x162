@@ -83,7 +83,7 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 				Yposition_player<=Yposition_player-2;
 			else if(btnR && ~btnL)
 				Xposition_player<=Xposition_player+2;
-			else if(btnU && ~btnD)
+			else if(btnL && ~btnR)
 				Xposition_player<=Xposition_player-2;
 			if(Xposition_block11 == 640)
 				Xposition_block11 <= 0;
