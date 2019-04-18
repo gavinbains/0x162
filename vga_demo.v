@@ -69,32 +69,65 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	always @(posedge DIV_CLK[21])
 		begin
 			Xposition_block11 <= Xposition_block11 + 10;
-			Xposition_block12 <= Xposition_block12 + 10;
+			Xposition_block21 <= Xposition_block21 + 10;
+			Xposition_block31 <= Xposition_block31 + 10;
+			Xposition_block41 <= Xposition_block41 + 10;
+			Xposition_block51 <= Xposition_block51 + 10;
+			Xposition_block61 <= Xposition_block61 + 10;
 			if(reset)
 				begin
 				Xposition_player<=320;
-				Yposition_player<=240;  // middle of y axis
+				Yposition_player<=480;  // middle of y axis
+				Yposition_block1 <= 60;
+				Yposition_block2 <= 120;
+				Yposition_block3 <= 180;
+				Yposition_block4 <= 240;
+				Yposition_block5 <= 300;
+				Yposition_block6 <= 360;
 				Xposition_block11 <= 0;   // start on far left of the screen
-				Xposition_block12 <= 320;   // start on far left of the screen
+				Xposition_block21 <= 120;   // start on far left of the screen
+				Xposition_block31 <= 240;
+				Xposition_block41 <= 360;
+				Xposition_block51 <= 480;
+				Xposition_block61 <= 600;
+				
 				end
 			else if(btnD && ~btnU)
-				Yposition_player<=Yposition_player+2;
+				Yposition_player<=Yposition_player+60;
 			else if(btnU && ~btnD)
-				Yposition_player<=Yposition_player-2;
+				Yposition_player<=Yposition_player-60;
 			else if(btnR && ~btnL)
 				Xposition_player<=Xposition_player+2;
 			else if(btnL && ~btnR)
 				Xposition_player<=Xposition_player-2;
 			if(Xposition_block11 == 640)
 				Xposition_block11 <= 0;
-			if(Xposition_block12 == 640)
-				Xposition_block12 <= 0;
+			if(Xposition_block21 == 640)
+				Xposition_block21 <= 0;
+			if(Xposition_block31 == 640)
+				Xposition_block31 <= 0;
+			if(Xposition_block41 == 640)
+				Xposition_block41 <= 0;
+			if(Xposition_block51 == 640)
+				Xposition_block51 <= 0;
+			if(Xposition_block61 == 640)
+				Xposition_block61 <= 0;
 		end
 
-	wire R = CounterY>=(Yposition_player-30) && CounterY<=(Yposition_player+30) && 
+	wire R = CounterY>=(Yposition_player) && CounterY<=(Yposition_player+60) && 
 	CounterX>=(Xposition_player - 30) && CounterX<=(Xposition_player +30);
-	wire G = (CounterX>Xposition_block11 && CounterX<(20 + Xposition_block11) && CounterY[5:3]==7) || 
-	(CounterX>Xposition_block12 && CounterX<(20 + Xposition_block12) && CounterY[5:3]==7);
+	wire G = //(CounterY>Yposition_block1 && CounterY<(Yposition_block1 + 60) && 
+	//CounterX>Xposition_block11 && CounterX<(20 + Xposition_block11)) || 
+	(CounterY>Yposition_block2 && CounterY<(Yposition_block2 + 60) && 
+	CounterX>Xposition_block21 && CounterX<(20 + Xposition_block21)); //||
+	//(CounterY>Yposition_block3 && CounterY<(Yposition_block3 + 60) && 
+	//CounterX>Xposition_block31 && CounterX<(20 + Xposition_block31)) ||
+	//(CounterY>Yposition_block4 && CounterY<(Yposition_block4 + 60) && 
+	//CounterX>Xposition_block41 && CounterX<(20 + Xposition_block41)) ||
+	//(CounterY>Yposition_block5 && CounterY<(Yposition_block5 + 60) && 
+	//CounterX>Xposition_block51 && CounterX<(20 + Xposition_block51)) ||
+	//(CounterY>Yposition_block6 && CounterY<(Yposition_block6 + 60) && 
+	//CounterX>Xposition_block61 && CounterX<(20 + Xposition_block61));
 	wire B = 0;
 	
 	always @(posedge clk)
