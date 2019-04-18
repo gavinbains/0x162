@@ -45,28 +45,53 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	/////////////////////////////////////////////////////////////////
 	///////////////		VGA control starts here		/////////////////
 	/////////////////////////////////////////////////////////////////
+	reg [9:0] Xposition_player;
 	reg [9:0] Yposition_player;
-	reg [9:0] Xposition_block;
-	reg [9:0] Yposition_block;
+	reg [9:0] Xposition_block11;
+	reg [9:0] Xposition_block12;
+	reg [9:0] Xposition_block21;
+	reg [9:0] Xposition_block22;
+	reg [9:0] Xposition_block31;
+	reg [9:0] Xposition_block32;
+	reg [9:0] Xposition_block41;
+	reg [9:0] Xposition_block42;
+	reg [9:0] Xposition_block51;
+	reg [9:0] Xposition_block52;
+	reg [9:0] Xposition_block61;
+	reg [9:0] Xposition_block62;
+	reg [9:0] Yposition_block1;
+	reg [9:0] Yposition_block2;
+	reg [9:0] Yposition_block3;
+	reg [9:0] Yposition_block4;
+	reg [9:0] Yposition_block5;
+	reg [9:0] Yposition_block6;
 	
 	always @(posedge DIV_CLK[21])
 		begin
 			Xposition_block <= Xposition_block + 1;
 			if(reset)
 				begin
+				Xposition_player<=320;
 				Yposition_player<=240;  // middle of y axis
-				Xposition_block <= 0;   // start on far left of the screen
+				Xposition_block11 <= 0;   // start on far left of the screen
+				Xposition_block12 <= 320;   // start on far left of the screen
 				end
 			else if(btnD && ~btnU)
 				Yposition_player<=Yposition_player+2;
 			else if(btnU && ~btnD)
 				Yposition_player<=Yposition_player-2;
+			else if(btnR && ~btnL)
+				Xposition_player<=Xposition_player+2;
+			else if(btnU && ~btnD)
+				Xposition_player<=Xposition_player-2;
 			if(Xposition_block == 640)
 				Xposition_block <= 0;
 		end
 
-	wire R = CounterY>=(Yposition_player-10) && CounterY<=(Yposition_player+10) && CounterX[8:5]==7;
-	wire G = CounterX>(0 + Xposition_block) && CounterX<(20 + Xposition_block) && CounterY[5:3]==7;
+	wire R = CounterY>=(Yposition_player-30) && CounterY<=(Yposition_player+30) && 
+	CounterX>=(Xposition_player - 30) && CounterX<=(Xposition_player +30);
+	wire G = (CounterX>Xposition_block11 && CounterX<(20 + Xposition_block11) && CounterY[5:3]==7) || 
+	(CounterX>Xposition_block12 && CounterX<(20 + Xposition_block12) && CounterY[5:3]==7);
 	wire B = 0;
 	
 	always @(posedge clk)
