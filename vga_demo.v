@@ -68,7 +68,8 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	
 	always @(posedge DIV_CLK[21])
 		begin
-			Xposition_block <= Xposition_block + 1;
+			Xposition_block11 <= Xposition_block11 + 10;
+			Xposition_block12 <= Xposition_block12 + 10;
 			if(reset)
 				begin
 				Xposition_player<=320;
@@ -84,8 +85,10 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 				Xposition_player<=Xposition_player+2;
 			else if(btnU && ~btnD)
 				Xposition_player<=Xposition_player-2;
-			if(Xposition_block == 640)
-				Xposition_block <= 0;
+			if(Xposition_block11 == 640)
+				Xposition_block11 <= 0;
+			if(Xposition_block12 == 640)
+				Xposition_block12 <= 0;
 		end
 
 	wire R = CounterY>=(Yposition_player-30) && CounterY<=(Yposition_player+30) && 
