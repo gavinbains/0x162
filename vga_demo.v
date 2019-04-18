@@ -45,20 +45,62 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	/////////////////////////////////////////////////////////////////
 	///////////////		VGA control starts here		/////////////////
 	/////////////////////////////////////////////////////////////////
+	function collision;
+	    input Xposition_player, Yposition_player, 
+	    	Xposition_block11, Xposition_block12,
+	    	Xposition_block21, Xposition_block22,
+	    	Xposition_block31, Xposition_block32,
+	    	Xposition_block41, Xposition_block42, 
+	    	Xposition_block51, Xposition_block52,
+	    	Xposition_block61, Xposition_block62; 
+	    begin
+			// Demonstrates driving external Global Reg
+			if((Xposition_block11 < Xposition_player + 30) && (Xposition_block11 > Xposition_player - 30) && (Yposition_player == 60))
+				collision = 1;
+			else if ((Xposition_block12 < Xposition_player + 30) && (Xposition_block12 > Xposition_player - 30) && (Yposition_player == 60))
+				collision = 1;
+			else if((Xposition_block21 < Xposition_player + 30) && (Xposition_block21 > Xposition_player - 30) && (Yposition_player == 120))
+				collision = 1;
+			else if((Xposition_block22 < Xposition_player + 30) && (Xposition_block22 > Xposition_player - 30) && (Yposition_player == 120))
+				collision = 1;
+			else if((Xposition_block31 < Xposition_player + 30) && (Xposition_block31 > Xposition_player - 30) && (Yposition_player == 180))
+				collision = 1;
+			else if ((Xposition_block32 < Xposition_player + 30) && (Xposition_block32 > Xposition_player - 30) && (Yposition_player == 180))
+				collision = 1;
+			else if ((Xposition_block41 < Xposition_player + 30) && (Xposition_block41 > Xposition_player - 30) && (Yposition_player == 240))
+				collision = 1;
+			else if ((Xposition_block42 < Xposition_player + 30) && (Xposition_block42 > Xposition_player - 30) && (Yposition_player == 240))
+				collision = 1;
+			else if ((Xposition_block51 < Xposition_player + 30) && (Xposition_block51 > Xposition_player - 30) && (Yposition_player == 300))
+				collision = 1;
+			else if ((Xposition_block52 < Xposition_player + 30) && (Xposition_block52 > Xposition_player - 30) && (Yposition_player == 300))
+				collision = 1;
+			else if ((Xposition_block61 < Xposition_player + 30) && (Xposition_block61 > Xposition_player - 30) && (Yposition_player == 360))
+				collision = 1;
+			else if ((Xposition_block62 < Xposition_player + 30) && (Xposition_block62 > Xposition_player - 30) && (Yposition_player == 360))
+				collision = 1;
+			else if ((Yposition_player > 420))
+				collision = 2;
+			else 
+				collision = 0;
+	    end
+  	endfunction
+
 	reg [9:0] Yposition_player;
 	reg [9:0] Xposition_block;
 	reg [9:0] Yposition_block;
 	
 	always @(posedge DIV_CLK[21])
 		begin
+			//assign didWin = collision(LOCATIONS);
 			Xposition_block <= Xposition_block + 1;
 			if(reset)
 				Yposition_player<=240;  // middle of y axis
 				Xposition_block <= 0;   // start on far left of the screen
 			else if(btnD && ~btnU)
-				Yposition_player<=Yposition_player+2;
+				Yposition_player<=Yposition_player+60;
 			else if(btnU && ~btnD)
-				Yposition_player<=Yposition_player-2;
+				Yposition_player<=Yposition_player-60;
 			if(Xposition_block == 640)
 				Xposition_block <= 0;
 		end
@@ -167,3 +209,25 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	//////////////  	  SSD control ends here 	 ///////////////////
 	/////////////////////////////////////////////////////////////////
 endmodule
+
+// module function_example ();
+ 
+//   reg r_Bit1=1'b1, r_Bit2=1'b0, r_Bit3=1'b1;
+//   wire w_Result;
+//   reg  r_Global;
+ 
+//   function do_math;
+//     input i_bit1, i_bit2, i_bit3; 
+//     reg   v_Temp; // Local Variable
+//     begin
+//       // Demonstrates driving external Global Reg
+//       r_Global = 1'b1; 
+       
+//       v_Temp  = (i_bit1 & i_bit2);
+//       do_math = (v_Temp | i_bit3);
+//     end
+//   endfunction
+ 
+//   assign w_Result = do_math(r_Bit1, r_Bit2, r_Bit3);
+ 
+// endmodule
