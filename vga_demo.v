@@ -3,7 +3,7 @@
 // VGA verilog template
 // Author:  Da Cheng
 //////////////////////////////////////////////////////////////////////////////////
-module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR
+module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR,
 	St_ce_bar, St_rp_bar, Mt_ce_bar, Mt_St_oe_bar, Mt_St_we_bar,
 	An0, An1, An2, An3, Ca, Cb, Cc, Cd, Ce, Cf, Cg, Dp,
 	LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7);
@@ -86,28 +86,87 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	    end
   	endfunction
 
+	reg [9:0] Xposition_player;
 	reg [9:0] Yposition_player;
-	reg [9:0] Xposition_block;
-	reg [9:0] Yposition_block;
+	reg [9:0] Xposition_block11;
+	reg [9:0] Xposition_block12;
+	reg [9:0] Xposition_block21;
+	reg [9:0] Xposition_block22;
+	reg [9:0] Xposition_block31;
+	reg [9:0] Xposition_block32;
+	reg [9:0] Xposition_block41;
+	reg [9:0] Xposition_block42;
+	reg [9:0] Xposition_block51;
+	reg [9:0] Xposition_block52;
+	reg [9:0] Xposition_block61;
+	reg [9:0] Xposition_block62;
+	reg [9:0] Yposition_block1;
+	reg [9:0] Yposition_block2;
+	reg [9:0] Yposition_block3;
+	reg [9:0] Yposition_block4;
+	reg [9:0] Yposition_block5;
+	reg [9:0] Yposition_block6;
 	
 	always @(posedge DIV_CLK[21])
 		begin
-			//assign didWin = collision(LOCATIONS);
-			Xposition_block <= Xposition_block + 1;
+			Xposition_block11 <= Xposition_block11 + 10;
+			Xposition_block21 <= Xposition_block21 + 10;
+			Xposition_block31 <= Xposition_block31 + 10;
+			Xposition_block41 <= Xposition_block41 + 10;
+			Xposition_block51 <= Xposition_block51 + 10;
+			Xposition_block61 <= Xposition_block61 + 10;
+			
 			if(reset)
-				Yposition_player<=240;  // middle of y axis
-				Xposition_block <= 0;   // start on far left of the screen
+				begin
+				Xposition_player<=320;
+				Yposition_player<=480;  // middle of y axis
+				Yposition_block1 <= 60;
+				Yposition_block2 <= 120;
+				Yposition_block3 <= 180;
+				Yposition_block4 <= 240;
+				Yposition_block5 <= 300;
+				Yposition_block6 <= 360;
+				Xposition_block11 <= 0;   // start on far left of the screen
+				Xposition_block21 <= 120;   // start on far left of the screen
+				Xposition_block31 <= 240;
+				Xposition_block41 <= 360;
+				Xposition_block51 <= 480;
+				Xposition_block61 <= 600;
+				end
 			else if(btnD && ~btnU)
 				Yposition_player<=Yposition_player+60;
 			else if(btnU && ~btnD)
 				Yposition_player<=Yposition_player-60;
-			if(Xposition_block == 640)
-				Xposition_block <= 0;
+
+			if(Xposition_block11 == 640)
+				Xposition_block11 <= 0;
+			if(Xposition_block21 == 640)
+				Xposition_block21 <= 0;
+			if(Xposition_block31 == 640)
+				Xposition_block31 <= 0;
+			if(Xposition_block41 == 640)
+				Xposition_block41 <= 0;
+			if(Xposition_block51 == 640)
+				Xposition_block51 <= 0;
+			if(Xposition_block61 == 640)
+				Xposition_block61 <= 0;
 		end
 
-	wire R = CounterY>=(Yposition_player-10) && CounterY<=(Yposition_player+10) && CounterX[8:5]==7;
-	wire G = CounterX>(0 + Xposition_block) && CounterX<(20 + Xposition_block) && CounterY[5:3]==7;
-	wire B = 0
+	wire R = CounterY>=(Yposition_player) && CounterY<=(Yposition_player+60) && 
+	CounterX>=(Xposition_player - 30) && CounterX<=(Xposition_player +30);
+	wire G = //(CounterY>Yposition_block1 && CounterY<(Yposition_block1 + 60) && 
+	//CounterX>Xposition_block11 && CounterX<(20 + Xposition_block11)) || 
+	(CounterY>Yposition_block2 && CounterY<(Yposition_block2 + 60) && 
+	CounterX>Xposition_block21 && CounterX<(20 + Xposition_block21)); //||
+	//(CounterY>Yposition_block3 && CounterY<(Yposition_block3 + 60) && 
+	//CounterX>Xposition_block31 && CounterX<(20 + Xposition_block31)) ||
+	//(CounterY>Yposition_block4 && CounterY<(Yposition_block4 + 60) && 
+	//CounterX>Xposition_block41 && CounterX<(20 + Xposition_block41)) ||
+	//(CounterY>Yposition_block5 && CounterY<(Yposition_block5 + 60) && 
+	//CounterX>Xposition_block51 && CounterX<(20 + Xposition_block51)) ||
+	//(CounterY>Yposition_block6 && CounterY<(Yposition_block6 + 60) && 
+	//CounterX>Xposition_block61 && CounterX<(20 + Xposition_block61));
+	wire B = 0;
 	
 	always @(posedge clk)
 	begin
