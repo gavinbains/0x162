@@ -86,6 +86,9 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	    end
   	endfunction
 	
+	reg[19:0] playerX;
+	reg[14:0] playerY;
+	
 	reg[19:0] row1; // Starting row
 	reg[19:0] row2;
 	reg[19:0] row3;
@@ -102,36 +105,8 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	reg[19:0] row14;
 	reg[19:0] row15; // Ending row
 	
-
-	reg [9:0] Xposition_player;
-	reg [9:0] Yposition_player;
-	reg [9:0] Xposition_block11;
-	reg [9:0] Xposition_block12;
-	reg [9:0] Xposition_block21;
-	reg [9:0] Xposition_block22;
-	reg [9:0] Xposition_block31;
-	reg [9:0] Xposition_block32;
-	reg [9:0] Xposition_block41;
-	reg [9:0] Xposition_block42;
-	reg [9:0] Xposition_block51;
-	reg [9:0] Xposition_block52;
-	reg [9:0] Xposition_block61;
-	reg [9:0] Xposition_block62;
-	reg [9:0] Yposition_block1;
-	reg [9:0] Yposition_block2;
-	reg [9:0] Yposition_block3;
-	reg [9:0] Yposition_block4;
-	reg [9:0] Yposition_block5;
-	reg [9:0] Yposition_block6;
-	
-	always @(posedge DIV_CLK[21])
-		begin
-			/* Xposition_block11 <= Xposition_block11 + 10;
-			Xposition_block21 <= Xposition_block21 + 10;
-			Xposition_block31 <= Xposition_block31 + 10;
-			Xposition_block41 <= Xposition_block41 + 10;
-			Xposition_block51 <= Xposition_block51 + 10;
-			Xposition_block61 <= Xposition_block61 + 10; */
+	always @(posedge DIV_CLK[23])
+		begin // Obsticles always block
 			row2 <= {row2[0], row2[19:1]};
 			row3 <= {row3[0], row3[19:1]};
 			row4 <= {row4[18:0], row4[19]};
@@ -148,27 +123,13 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 			
 			if(reset)
 				begin
- 					Xposition_player<=320;	// middle of screen
-					Yposition_player<=480;  // bottom of screen
-/*					Yposition_block1 <= 60;
-					Yposition_block2 <= 120;
-					Yposition_block3 <= 180;
-					Yposition_block4 <= 240;
-					Yposition_block5 <= 300;
-					Yposition_block6 <= 360;
-					Xposition_block11 <= 0;   // start on far left of the screen
-					Xposition_block21 <= 120;
-					Xposition_block31 <= 240;
-					Xposition_block41 <= 360;
-					Xposition_block51 <= 480;
-					Xposition_block61 <= 600;
- */					row1 <= 20'b00000000000000000000; // Starting row
-					row2 <= 20'b00000000000000000000;
-					row3 <= 20'b00000000000000000000;
-					row4 <= 20'b00000000000000000000;
-					row5 <= 20'b00000000000000000000;
-					row6 <= 20'b00000000000000000000;
-					row7 <= 20'b00000000000000000000;
+					row1 <= 20'b00000000000000000000; // Starting row
+					row2 <= 20'b11100000110000010000;
+					row3 <= 20'b00000110000100000000;
+					row4 <= 20'b10000000000111000000;
+					row5 <= 20'b00000010000000000010;
+					row6 <= 20'b00000111000000000111;
+					row7 <= 20'b00000000000000000000; // Middle row
 					row8 <= 20'b00000000000000000000;
 					row9 <= 20'b00000000000000000000;
 					row10 <= 20'b00000000000000000000;
@@ -178,40 +139,38 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 					row14 <= 20'b00000000000000000000;
 					row15 <= 20'b00000000000000000000; // Ending row
 				end
+		end
+	
+	
+	always @(posedge DIV_CLK[22])
+		begin // Player always block
+			if(reset)
+				begin
+					playerX <= 20'b00000000001000000000;
+					playerY <= 15'b100000000000000;
+				end
+			
 			else if(btnD && ~btnU)
-				Yposition_player<=Yposition_player+60;
+				playerY <= {playerY[13:0], playerY[14]};
+				
 			else if(btnU && ~btnD)
-				Yposition_player<=Yposition_player-60;
-
-			/* if(Xposition_block11 == 640)
-				Xposition_block11 <= 0;
-			if(Xposition_block21 == 640)
-				Xposition_block21 <= 0;
-			if(Xposition_block31 == 640)
-				Xposition_block31 <= 0;
-			if(Xposition_block41 == 640)
-				Xposition_block41 <= 0;
-			if(Xposition_block51 == 640)
-				Xposition_block51 <= 0;
-			if(Xposition_block61 == 640)
-				Xposition_block61 <= 0; */
+				playerY <= {playerY[0], playerY[14:1]};
+				
+			else if(btnR && ~btnL)
+				playerX <= {playerX[13:0], playerX[14]};
+				
+			else if(btnL && ~btnR)
+				playerX <= {playerX[0], playerX[14:1]};
 		end
 
-	wire R = (CounterY[9:5]=14 && row2[CounterX[9:5]]
-	wire G = CounterY>=(Yposition_player) && CounterY<=(Yposition_player+32) && 
-	CounterX>=(Xposition_player - 16) && CounterX<=(Xposition_player +16);
-	/* (CounterY>Yposition_block1 && CounterY<(Yposition_block1 + 60) && 
-	CounterX>Xposition_block11 && CounterX<(20 + Xposition_block11)) || 
-	(CounterY>Yposition_block2 && CounterY<(Yposition_block2 + 60) && 
-	CounterX>Xposition_block21 && CounterX<(20 + Xposition_block21)) ||
-	(CounterY>Yposition_block3 && CounterY<(Yposition_block3 + 60) && 
-	CounterX>Xposition_block31 && CounterX<(20 + Xposition_block31)) ||
-	(CounterY>Yposition_block4 && CounterY<(Yposition_block4 + 60) && 
-	CounterX>Xposition_block41 && CounterX<(20 + Xposition_block41)) ||
-	(CounterY>Yposition_block5 && CounterY<(Yposition_block5 + 60) && 
-	CounterX>Xposition_block51 && CounterX<(20 + Xposition_block51)) ||
-	(CounterY>Yposition_block6 && CounterY<(Yposition_block6 + 60) && 
-	CounterX>Xposition_block61 && CounterX<(20 + Xposition_block61)); */
+	wire R = (CounterY[9:5]==13 && row2[CounterX[9:5]]) || (CounterY[9:5]==12 && row3[CounterX[9:5]]) ||
+	(CounterY[9:5]==11 && row4[CounterX[9:5]]) || (CounterY[9:5]==10 && row5[CounterX[9:5]]) ||
+	(CounterY[9:5]==9 && row6[CounterX[9:5]]) || (CounterY[9:5]==8 && row7[CounterX[9:5]]) ||
+	(CounterY[9:5]==7 && row8[CounterX[9:5]]) || (CounterY[9:5]==6 && row9[CounterX[9:5]]) ||
+	(CounterY[9:5]==5 && row10[CounterX[9:5]]) || (CounterY[9:5]==4 && row11[CounterX[9:5]]) ||
+	(CounterY[9:5]==3 && row12[CounterX[9:5]]) || (CounterY[9:5]==2 && row13[CounterX[9:5]]) ||
+	(CounterY[9:5]==2 && row14[CounterX[9:5]]);
+	wire G = playerX[CounterX[9:5]] && playerY[CounterY[9:5]];
 	wire B = 0;
 	
 	always @(posedge clk)
