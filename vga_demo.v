@@ -89,55 +89,41 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	reg[19:0] playerX;
 	reg[14:0] playerY;
 	
-	reg[19:0] row1; // Starting row
-	reg[19:0] row2;
-	reg[19:0] row3;
-	reg[19:0] row4;
-	reg[19:0] row5;
-	reg[19:0] row6;
-	reg[19:0] row7;
-	reg[19:0] row8;
-	reg[19:0] row9;
-	reg[19:0] row10;
-	reg[19:0] row11;
-	reg[19:0] row12;
-	reg[19:0] row13;
-	reg[19:0] row14;
-	reg[19:0] row15; // Ending row
+	reg[19:0] row[0:14];
 	
 	always @(posedge DIV_CLK[23])
 		begin // Obsticles always block
-			row2 <= {row2[0], row2[19:1]};
-			row3 <= {row3[0], row3[19:1]};
-			row4 <= {row4[18:0], row4[19]};
-			row5 <= {row5[18:0], row5[19]};
-			row6 <= {row6[0], row6[19:1]};
-			row7 <= {row7[0], row7[19:1]};
-			row8 <= {row8[18:0], row8[19]};
-			row9 <= {row9[18:0], row9[19]};
-			row10 <= {row10[0], row10[19:1]};
-			row11 <= {row11[0], row11[19:1]};
-			row12 <= {row12[18:0], row12[19]};
-			row13 <= {row13[0], row13[19:1]};
-			row14 <= {row14[18:0], row14[19]};
+			row[1] <= {row[1][0], row[1][19:1]};
+			row[2] <= {row[2][0], row[2][19:1]};
+			row[3] <= {row[3][18:0], row[3][19]};
+			row[4] <= {row[4][18:0], row[4][19]};
+			row[5] <= {row[5][0], row[5][19:1]};
+			row[6] <= {row[6][0], row[6][19:1]};
+			row[7] <= {row[7][18:0], row[7][19]};
+			row[8] <= {row[8][18:0], row[8][19]};
+			row[9] <= {row[9][0], row[9][19:1]};
+			row[10] <= {row[10][0], row[10][19:1]};
+			row[11] <= {row[11][18:0], row[11][19]};
+			row[12] <= {row[12][0], row[12][19:1]};
+			row[13] <= {row[13][18:0], row[13][19]};
 			
 			if(reset)
 				begin
-					row1 <= 20'b00000000000000000000; // Starting row
-					row2 <= 20'b11100000110000010000;
-					row3 <= 20'b00000110000100000000;
-					row4 <= 20'b10000000000111000000;
-					row5 <= 20'b00000010000000000010;
-					row6 <= 20'b00000111000000000111;
-					row7 <= 20'b00000000000000000000; // Middle row
-					row8 <= 20'b00000000000000000000;
-					row9 <= 20'b00000000000000000000;
-					row10 <= 20'b00000000000000000000;
-					row11 <= 20'b00000000000000000000;
-					row12 <= 20'b00000000000000000000;
-					row13 <= 20'b00000000000000000000;
-					row14 <= 20'b00000000000000000000;
-					row15 <= 20'b00000000000000000000; // Ending row
+					row[0] <= 20'b00000000000000000000; // Starting row
+					row[1] <= 20'b11100000110000010000;
+					row[2] <= 20'b00000110000100000000;
+					row[3] <= 20'b10000000000111000000;
+					row[4] <= 20'b00000010000000000010;
+					row[5] <= 20'b00000111000000000111;
+					row[6] <= 20'b00000000000000000000; // Middle row
+					row[7] <= 20'b00000000000000000000;
+					row[8] <= 20'b00000000000000000000;
+					row[9] <= 20'b00000000000000000000;
+					row[10] <= 20'b00000000000000000000;
+					row[11] <= 20'b00000000000000000000;
+					row[12] <= 20'b00000000000000000000;
+					row[13] <= 20'b00000000000000000000;
+					row[14] <= 20'b00000000000000000000; // Ending row
 				end
 		end
 	
@@ -163,13 +149,13 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 				playerX <= {playerX[0], playerX[14:1]};
 		end
 
-	wire R = (CounterY[9:5]==13 && row2[CounterX[9:5]]) || (CounterY[9:5]==12 && row3[CounterX[9:5]]) ||
-	(CounterY[9:5]==11 && row4[CounterX[9:5]]) || (CounterY[9:5]==10 && row5[CounterX[9:5]]) ||
-	(CounterY[9:5]==9 && row6[CounterX[9:5]]) || (CounterY[9:5]==8 && row7[CounterX[9:5]]) ||
-	(CounterY[9:5]==7 && row8[CounterX[9:5]]) || (CounterY[9:5]==6 && row9[CounterX[9:5]]) ||
-	(CounterY[9:5]==5 && row10[CounterX[9:5]]) || (CounterY[9:5]==4 && row11[CounterX[9:5]]) ||
-	(CounterY[9:5]==3 && row12[CounterX[9:5]]) || (CounterY[9:5]==2 && row13[CounterX[9:5]]) ||
-	(CounterY[9:5]==2 && row14[CounterX[9:5]]);
+	wire R = (CounterY[9:5]==13 && row[1][CounterX[9:5]]) || (CounterY[9:5]==12 && row[2][CounterX[9:5]]) ||
+	(CounterY[9:5]==11 && row[3][CounterX[9:5]]) || (CounterY[9:5]==10 && row[4][CounterX[9:5]]) ||
+	(CounterY[9:5]==9 && row[5][CounterX[9:5]]) || (CounterY[9:5]==8 && row[6][CounterX[9:5]]) ||
+	(CounterY[9:5]==7 && row[7][CounterX[9:5]]) || (CounterY[9:5]==6 && row[8][CounterX[9:5]]) ||
+	(CounterY[9:5]==5 && row[9][CounterX[9:5]]) || (CounterY[9:5]==4 && row[10][CounterX[9:5]]) ||
+	(CounterY[9:5]==3 && row[12][CounterX[9:5]]) || (CounterY[9:5]==2 && row[12][CounterX[9:5]]) ||
+	(CounterY[9:5]==2 && row[13][CounterX[9:5]]);
 	wire G = playerX[CounterX[9:5]] && playerY[CounterY[9:5]];
 	wire B = 0;
 	
