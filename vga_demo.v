@@ -75,29 +75,29 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 		begin
 			if (((playerX & row13) && (playerY[1] && (CounterY[9:5] == 1))) != 0)
 				collision = 1;
-			if (((playerX & row12) && (playerY[2] && (CounterY[9:5] == 2))) != 0)
+			else if (((playerX & row12) && (playerY[2] && (CounterY[9:5] == 2))) != 0)
 				collision = 1;
-			if (((playerX & row11) && (playerY[3] && (CounterY[9:5] == 3))) != 0)
+			else if (((playerX & row11) && (playerY[3] && (CounterY[9:5] == 3))) != 0)
 				collision = 1;
-			if (((playerX & row10) && (playerY[4] && (CounterY[9:5] == 4))) != 0)
+			else if (((playerX & row10) && (playerY[4] && (CounterY[9:5] == 4))) != 0)
 				collision = 1;
-			if (((playerX & row9) && (playerY[5] && (CounterY[9:5] == 5))) != 0)
+			else if (((playerX & row9) && (playerY[5] && (CounterY[9:5] == 5))) != 0)
 				collision = 1;
-			if (((playerX & row8) && (playerY[6] && (CounterY[9:5] == 6))) != 0)
+			else if (((playerX & row8) && (playerY[6] && (CounterY[9:5] == 6))) != 0)
 				collision = 1;
-			if (((playerX & row7) && (playerY[7] && (CounterY[9:5] == 7))) != 0)
+			else if (((playerX & row7) && (playerY[7] && (CounterY[9:5] == 7))) != 0)
 				collision = 1;
-			if (((playerX & row6) && (playerY[8] && (CounterY[9:5] == 8))) != 0)
+			else if (((playerX & row6) && (playerY[8] && (CounterY[9:5] == 8))) != 0)
 				collision = 1;
-			if (((playerX & row5) && (playerY[9] && (CounterY[9:5] == 9))) != 0)
+			else if (((playerX & row5) && (playerY[9] && (CounterY[9:5] == 9))) != 0)
 				collision = 1;
-			if (((playerX & row4) && (playerY[10] && (CounterY[9:5] == 10))) != 0)
+			else if (((playerX & row4) && (playerY[10] && (CounterY[9:5] == 10))) != 0)
 				collision = 1;
-			if (((playerX & row3) && (playerY[11] && (CounterY[9:5] == 11))) != 0)
+			else if (((playerX & row3) && (playerY[11] && (CounterY[9:5] == 11))) != 0)
 				collision = 1;
-			if (((playerX & row2) && (playerY[12] && (CounterY[9:5] == 12))) != 0)
+			else if (((playerX & row2) && (playerY[12] && (CounterY[9:5] == 12))) != 0)
 				collision = 1;
-			if (((playerX & row1) && (playerY[13] && (CounterY[9:5] == 13))) != 0)
+			else if (((playerX & row1) && (playerY[13] && (CounterY[9:5] == 13))) != 0)
 				collision = 1;
 		end
 		/* 
@@ -135,11 +135,11 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 					row3 <= 20'b10000000000111000000;
 					row4 <= 20'b00000010000000000010;
 					row5 <= 20'b00000111000000000111;
-					row6 <= 20'b10000010000001000001; 
+					row6 <= 20'b01100000000111000000; 
 					row7 <= 20'b00000000000000000000; // Middle row
 					row8 <= 20'b00001100000000110000;
-					row9 <= 20'b00110000100001110000;
-					row10 <= 20'b10000011100000000011;
+					row9 <= 20'b00110010000001110000;
+					row10 <= 20'b10000000011000000011;
 					row11 <= 20'b01000010000001000000;
 					row12 <= 20'b00010000000110000000;
 					row13 <= 20'b00000011000000000100;
@@ -156,11 +156,12 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
+			// if this portion is uncommented, the player will not show up apon reset
 			/* if(w_Result)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
-				end */
+				end  */
 				
 			else if(btnD && ~btnU)
 				playerY <= {playerY[13:0], playerY[14]};
