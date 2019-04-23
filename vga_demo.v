@@ -39,103 +39,129 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	wire inDisplayArea;
 	wire [9:0] CounterX;
 	wire [9:0] CounterY;
+	wire w_Result;
+	assign w_Result = collision(playerX, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, playerY, CounterY);
 
 	hvsync_generator syncgen(.clk(clk), .reset(reset),.vga_h_sync(vga_h_sync), .vga_v_sync(vga_v_sync), .inDisplayArea(inDisplayArea), .CounterX(CounterX), .CounterY(CounterY));
 	
 	/////////////////////////////////////////////////////////////////
 	///////////////		VGA control starts here		/////////////////
 	/////////////////////////////////////////////////////////////////
-	function collision;
-	    input Xposition_player, Yposition_player, 
-	    	Xposition_block11, Xposition_block12,
-	    	Xposition_block21, Xposition_block22,
-	    	Xposition_block31, Xposition_block32,
-	    	Xposition_block41, Xposition_block42, 
-	    	Xposition_block51, Xposition_block52,
-	    	Xposition_block61, Xposition_block62; 
-	    begin
-			// Demonstrates driving external Global Reg
-			if((Xposition_block11 < Xposition_player + 30) && (Xposition_block11 > Xposition_player - 30) && (Yposition_player == 60))
-				collision = 1;
-			else if ((Xposition_block12 < Xposition_player + 30) && (Xposition_block12 > Xposition_player - 30) && (Yposition_player == 60))
-				collision = 1;
-			else if((Xposition_block21 < Xposition_player + 30) && (Xposition_block21 > Xposition_player - 30) && (Yposition_player == 120))
-				collision = 1;
-			else if((Xposition_block22 < Xposition_player + 30) && (Xposition_block22 > Xposition_player - 30) && (Yposition_player == 120))
-				collision = 1;
-			else if((Xposition_block31 < Xposition_player + 30) && (Xposition_block31 > Xposition_player - 30) && (Yposition_player == 180))
-				collision = 1;
-			else if ((Xposition_block32 < Xposition_player + 30) && (Xposition_block32 > Xposition_player - 30) && (Yposition_player == 180))
-				collision = 1;
-			else if ((Xposition_block41 < Xposition_player + 30) && (Xposition_block41 > Xposition_player - 30) && (Yposition_player == 240))
-				collision = 1;
-			else if ((Xposition_block42 < Xposition_player + 30) && (Xposition_block42 > Xposition_player - 30) && (Yposition_player == 240))
-				collision = 1;
-			else if ((Xposition_block51 < Xposition_player + 30) && (Xposition_block51 > Xposition_player - 30) && (Yposition_player == 300))
-				collision = 1;
-			else if ((Xposition_block52 < Xposition_player + 30) && (Xposition_block52 > Xposition_player - 30) && (Yposition_player == 300))
-				collision = 1;
-			else if ((Xposition_block61 < Xposition_player + 30) && (Xposition_block61 > Xposition_player - 30) && (Yposition_player == 360))
-				collision = 1;
-			else if ((Xposition_block62 < Xposition_player + 30) && (Xposition_block62 > Xposition_player - 30) && (Yposition_player == 360))
-				collision = 1;
-			else if ((Yposition_player > 420))
-				collision = 2;
-			else 
-				collision = 0;
-	    end
-  	endfunction
-	
 	reg[19:0] playerX;
 	reg[14:0] playerY;
 	
-	reg[19:0] row[0:14];
+	reg[19:0] row0;
+	reg[19:0] row1;
+	reg[19:0] row2;
+	reg[19:0] row3;
+	reg[19:0] row4;
+	reg[19:0] row5;
+	reg[19:0] row6;
+	reg[19:0] row7;
+	reg[19:0] row8;
+	reg[19:0] row9;
+	reg[19:0] row10;
+	reg[19:0] row11;
+	reg[19:0] row12;
+	reg[19:0] row13;
+	reg[19:0] row14;
+	
+	function collision;
+	   input [19:0] playerX;
+		input [19:0] row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13;
+		input[14:0] playerY;
+		input[9:0] CounterY;
+		integer i;
+		begin
+			if (((playerX & row13) && (playerY[1] && (CounterY[9:5] == 1))) != 0)
+				collision = 1;
+			if (((playerX & row12) && (playerY[2] && (CounterY[9:5] == 2))) != 0)
+				collision = 1;
+			if (((playerX & row11) && (playerY[3] && (CounterY[9:5] == 3))) != 0)
+				collision = 1;
+			if (((playerX & row10) && (playerY[4] && (CounterY[9:5] == 4))) != 0)
+				collision = 1;
+			if (((playerX & row9) && (playerY[5] && (CounterY[9:5] == 5))) != 0)
+				collision = 1;
+			if (((playerX & row8) && (playerY[6] && (CounterY[9:5] == 6))) != 0)
+				collision = 1;
+			if (((playerX & row7) && (playerY[7] && (CounterY[9:5] == 7))) != 0)
+				collision = 1;
+			if (((playerX & row6) && (playerY[8] && (CounterY[9:5] == 8))) != 0)
+				collision = 1;
+			if (((playerX & row5) && (playerY[9] && (CounterY[9:5] == 9))) != 0)
+				collision = 1;
+			if (((playerX & row4) && (playerY[10] && (CounterY[9:5] == 10))) != 0)
+				collision = 1;
+			if (((playerX & row3) && (playerY[11] && (CounterY[9:5] == 11))) != 0)
+				collision = 1;
+			if (((playerX & row2) && (playerY[12] && (CounterY[9:5] == 12))) != 0)
+				collision = 1;
+			if (((playerX & row1) && (playerY[13] && (CounterY[9:5] == 13))) != 0)
+				collision = 1;
+		end
+		/* 
+	    begin
+			collision = 0;
+			for (i = 1; i <= 13; i = i + 1) begin
+				if (((playerX & row[i]) && (playerY[i] && (CounterY[9:5] == i))) != 0)
+					collision = 1;
+			end
+	    end */
+  	endfunction
+	
 	
 	always @(posedge DIV_CLK[23])
 		begin // Obsticles always block
-			row[1] <= {row[1][0], row[1][19:1]};
-			row[2] <= {row[2][0], row[2][19:1]};
-			row[3] <= {row[3][18:0], row[3][19]};
-			row[4] <= {row[4][18:0], row[4][19]};
-			row[5] <= {row[5][0], row[5][19:1]};
-			row[6] <= {row[6][0], row[6][19:1]};
-			row[7] <= {row[7][18:0], row[7][19]};
-			row[8] <= {row[8][18:0], row[8][19]};
-			row[9] <= {row[9][0], row[9][19:1]};
-			row[10] <= {row[10][0], row[10][19:1]};
-			row[11] <= {row[11][18:0], row[11][19]};
-			row[12] <= {row[12][0], row[12][19:1]};
-			row[13] <= {row[13][18:0], row[13][19]};
+			row1 <= {row1[0], row1[19:1]};
+			row2 <= {row2[0], row2[19:1]};
+			row3 <= {row3[18:0], row3[19]};
+			row4 <= {row4[18:0], row4[19]};
+			row5 <= {row5[0], row5[19:1]};
+			row6 <= {row6[0], row6[19:1]};
+			row7 <= {row7[18:0], row7[19]};
+			row8 <= {row8[18:0], row8[19]};
+			row9 <= {row9[0], row9[19:1]};
+			row10 <= {row10[0], row10[19:1]};
+			row11 <= {row11[18:0], row11[19]};
+			row12 <= {row12[0], row12[19:1]};
+			row13 <= {row13[18:0], row13[19]};
 			
 			if(reset)
 				begin
-					row[0] <= 20'b00000000000000000000; // Starting row
-					row[1] <= 20'b11100000110000010000;
-					row[2] <= 20'b00000110000100000000;
-					row[3] <= 20'b10000000000111000000;
-					row[4] <= 20'b00000010000000000010;
-					row[5] <= 20'b00000111000000000111;
-					row[6] <= 20'b00000000000000000000; // Middle row
-					row[7] <= 20'b00000000000000000000;
-					row[8] <= 20'b00000000000000000000;
-					row[9] <= 20'b00000000000000000000;
-					row[10] <= 20'b00000000000000000000;
-					row[11] <= 20'b00000000000000000000;
-					row[12] <= 20'b00000000000000000000;
-					row[13] <= 20'b00000000000000000000;
-					row[14] <= 20'b00000000000000000000; // Ending row
+					row0 <= 20'b00000000000000000000; // Starting row
+					row1 <= 20'b11100000110000010000;
+					row2 <= 20'b00000110000100000000;
+					row3 <= 20'b10000000000111000000;
+					row4 <= 20'b00000010000000000010;
+					row5 <= 20'b00000111000000000111;
+					row6 <= 20'b10000010000001000001; 
+					row7 <= 20'b00000000000000000000; // Middle row
+					row8 <= 20'b00001100000000110000;
+					row9 <= 20'b00110000100001110000;
+					row10 <= 20'b10000011100000000011;
+					row11 <= 20'b01000010000001000000;
+					row12 <= 20'b00010000000110000000;
+					row13 <= 20'b00000011000000000100;
+					row14 <= 20'b00000000000000000000; // Ending row
 				end
 		end
 	
 	
 	always @(posedge DIV_CLK[22])
 		begin // Player always block
+			
 			if(reset)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			
+			/* if(w_Result)
+				begin
+					playerX <= 20'b00000000001000000000;
+					playerY <= 15'b100000000000000;
+				end */
+				
 			else if(btnD && ~btnU)
 				playerY <= {playerY[13:0], playerY[14]};
 				
@@ -149,13 +175,13 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 				playerX <= {playerX[0], playerX[14:1]};
 		end
 
-	wire R = (CounterY[9:5]==13 && row[1][CounterX[9:5]]) || (CounterY[9:5]==12 && row[2][CounterX[9:5]]) ||
-	(CounterY[9:5]==11 && row[3][CounterX[9:5]]) || (CounterY[9:5]==10 && row[4][CounterX[9:5]]) ||
-	(CounterY[9:5]==9 && row[5][CounterX[9:5]]) || (CounterY[9:5]==8 && row[6][CounterX[9:5]]) ||
-	(CounterY[9:5]==7 && row[7][CounterX[9:5]]) || (CounterY[9:5]==6 && row[8][CounterX[9:5]]) ||
-	(CounterY[9:5]==5 && row[9][CounterX[9:5]]) || (CounterY[9:5]==4 && row[10][CounterX[9:5]]) ||
-	(CounterY[9:5]==3 && row[12][CounterX[9:5]]) || (CounterY[9:5]==2 && row[12][CounterX[9:5]]) ||
-	(CounterY[9:5]==2 && row[13][CounterX[9:5]]);
+	wire R = (CounterY[9:5]==13 && row1[CounterX[9:5]]) || (CounterY[9:5]==12 && row2[CounterX[9:5]]) ||
+	(CounterY[9:5]==11 && row3[CounterX[9:5]]) || (CounterY[9:5]==10 && row4[CounterX[9:5]]) ||
+	(CounterY[9:5]==9 && row5[CounterX[9:5]]) || (CounterY[9:5]==8 && row6[CounterX[9:5]]) ||
+	(CounterY[9:5]==7 && row7[CounterX[9:5]]) || (CounterY[9:5]==6 && row8[CounterX[9:5]]) ||
+	(CounterY[9:5]==5 && row9[CounterX[9:5]]) || (CounterY[9:5]==4 && row10[CounterX[9:5]]) ||
+	(CounterY[9:5]==3 && row11[CounterX[9:5]]) || (CounterY[9:5]==2 && row12[CounterX[9:5]]) ||
+	(CounterY[9:5]==1 && row13[CounterX[9:5]]);
 	wire G = playerX[CounterX[9:5]] && playerY[CounterY[9:5]];
 	wire B = 0;
 	
