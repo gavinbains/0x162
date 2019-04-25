@@ -3,11 +3,11 @@
 // VGA verilog template
 // Author:  Da Cheng
 //////////////////////////////////////////////////////////////////////////////////
-module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR,
+module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, btnU, btnD, btnL, btnR, btnC,
 	St_ce_bar, St_rp_bar, Mt_ce_bar, Mt_St_oe_bar, Mt_St_we_bar,
 	An0, An1, An2, An3, Ca, Cb, Cc, Cd, Ce, Cf, Cg, Dp,
 	LD0, LD1, LD2, LD3, LD4, LD5, LD6, LD7);
-	input ClkPort, Sw0, btnU, btnD, Sw0, Sw1, btnR, btnL;
+	input ClkPort, Sw0, btnU, btnD, Sw0, Sw1, btnR, btnL, btnC;
 	output St_ce_bar, St_rp_bar, Mt_ce_bar, Mt_St_oe_bar, Mt_St_we_bar;
 	output vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b;
 	output An0, An1, An2, An3, Ca, Cb, Cc, Cd, Ce, Cf, Cg, Dp;
@@ -40,8 +40,6 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	wire inDisplayArea;
 	wire [9:0] CounterX;
 	wire [9:0] CounterY;
-	//wire w_Result;
-	//assign w_Result = collision(playerX, row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13, playerY, CounterY);
 
 	hvsync_generator syncgen(.clk(clk), .reset(reset),.vga_h_sync(vga_h_sync), .vga_v_sync(vga_v_sync), .inDisplayArea(inDisplayArea), .CounterX(CounterX), .CounterY(CounterY));
 	
@@ -50,6 +48,13 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	/////////////////////////////////////////////////////////////////
 	reg[19:0] playerX;
 	reg[14:0] playerY;
+	
+	reg slot1;
+	reg slot2;
+	reg slot3;
+	reg slot4;
+	reg slot5;
+	reg slot6;
 	
 	reg[19:0] row0;
 	reg[19:0] row1;
@@ -67,49 +72,24 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	reg[19:0] row13;
 	reg[19:0] row14;
 	
-	/* function collision;
-	   input [19:0] playerX;
-		input [19:0] row1, row2, row3, row4, row5, row6, row7, row8, row9, row10, row11, row12, row13;
-		input[14:0] playerY;
-		input[9:0] CounterY;
-		integer i;
-		begin
-			if (((playerX & row13) && (playerY[1] && (CounterY[9:5] == 1))) != 0)
-				collision = 1;
-			else if (((playerX & row12) && (playerY[2] && (CounterY[9:5] == 2))) != 0)
-				collision = 1;
-			else if (((playerX & row11) && (playerY[3] && (CounterY[9:5] == 3))) != 0)
-				collision = 1;
-			else if (((playerX & row10) && (playerY[4] && (CounterY[9:5] == 4))) != 0)
-				collision = 1;
-			else if (((playerX & row9) && (playerY[5] && (CounterY[9:5] == 5))) != 0)
-				collision = 1;
-			else if (((playerX & row8) && (playerY[6] && (CounterY[9:5] == 6))) != 0)
-				collision = 1;
-			else if (((playerX & row7) && (playerY[7] && (CounterY[9:5] == 7))) != 0)
-				collision = 1;
-			else if (((playerX & row6) && (playerY[8] && (CounterY[9:5] == 8))) != 0)
-				collision = 1;
-			else if (((playerX & row5) && (playerY[9] && (CounterY[9:5] == 9))) != 0)
-				collision = 1;
-			else if (((playerX & row4) && (playerY[10] && (CounterY[9:5] == 10))) != 0)
-				collision = 1;
-			else if (((playerX & row3) && (playerY[11] && (CounterY[9:5] == 11))) != 0)
-				collision = 1;
-			else if (((playerX & row2) && (playerY[12] && (CounterY[9:5] == 12))) != 0)
-				collision = 1;
-			else if (((playerX & row1) && (playerY[13] && (CounterY[9:5] == 13))) != 0)
-				collision = 1;
-		end
-		
-	    begin
-			collision = 0;
-			for (i = 1; i <= 13; i = i + 1) begin
-				if (((playerX & row[i]) && (playerY[i] && (CounterY[9:5] == i))) != 0)
-					collision = 1;
-			end
-	    end
-  	endfunction */
+	wire win;
+	assign win = (playerY[0] && ((playerX & row0) == 0));
+	
+	reg[19:0] win0;
+	reg[19:0] win1;
+	reg[19:0] win2;
+	reg[19:0] win3;
+	reg[19:0] win4;
+	reg[19:0] win5;
+	reg[19:0] win6;
+	reg[19:0] win7;
+	reg[19:0] win8;
+	reg[19:0] win9;
+	reg[19:0] win10;
+	reg[19:0] win11;
+	reg[19:0] win12;
+	reg[19:0] win13;
+	reg[19:0] win14;
 	
 	
 	always @(posedge DIV_CLK[23])
@@ -127,8 +107,7 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 			row11 <= {row11[18:0], row11[19]};
 			row12 <= {row12[0], row12[19:1]};
 			row13 <= {row13[18:0], row13[19]};
-			
-			if(reset)
+			if(reset || btnC)
 				begin
 					row0 <= 20'b00000000000000000000; // Ending row
 					row1 <= 20'b11100000110000010000;
@@ -146,98 +125,151 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 					row13 <= 20'b00000011000000000100;
 					row14 <= 20'b00000000000000000000; // Starting row
 				end
+			
+			if(win)
+				begin
+					row0 <= 20'b00000000000000000000; // Ending row
+					row1 <= 20'b00000000000000000000;
+					row2 <= 20'b00000000000000000000;
+					row3 <= 20'b00000000000000000000;
+					row4 <= 20'b00000000000000000000;
+					row5 <= 20'b00000000000000000000;
+					row6 <= 20'b00000000000000000000; 
+					row7 <= 20'b00000000000000000000; // Middle row
+					row8 <= 20'b00000000000000000000;
+					row9 <= 20'b00000000000000000000;
+					row10 <= 20'b00000000000000000000;
+					row11 <= 20'b00000000000000000000;
+					row12 <= 20'b00000000000000000000;
+					row13 <= 20'b00000000000000000000;
+					row14 <= 20'b00000000000000000000; // Starting row
+				end 
 		end 
 	
 	
 	always @(posedge DIV_CLK[22])
 		begin // Player always block
 			
-			if(reset)
+			if(reset || btnC)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
+					
+					win0 <= 20'b00000000000000000000;
+					win1 <= 20'b00000000000000000000;
+					win2 <= 20'b00000000000000000000;
+					win3 <= 20'b00000000000000000000;
+					win4 <= 20'b00000000000000000000;
+					win5 <= 20'b00000000000000000000;
+					win6 <= 20'b00000000000000000000;
+					win7 <= 20'b00000000000000000000;
+					win8 <= 20'b00000000000000000000;
+					win9 <= 20'b00000000000000000000;
+					win10 <= 20'b00000000000000000000;
+					win11 <= 20'b00000000000000000000;
+					win12 <= 20'b00000000000000000000;
+					win13 <= 20'b00000000000000000000;
+					win14 <= 20'b00000000000000000000;
+					
+					slot1 <= 0;
+					slot2 <= 0;
+					slot3 <= 0;
+					slot4 <= 0;
+					slot5 <= 0;
+					slot6 <= 0;
 				end
 			 
 				
-			else if(btnD && ~btnU)
+			else if(btnD && ~btnU && ~playerY[14])
 				playerY <= {playerY[13:0], playerY[14]};
 				
-			else if(btnU && ~btnD)
+			else if(btnU && ~btnD && ~playerY[0])
 				playerY <= {playerY[0], playerY[14:1]};
 				
-			else if(btnR && ~btnL)
-				playerX <= {playerX[13:0], playerX[14]};
+			else if(btnR && ~btnL && ~playerX[19])
+				playerX <= {playerX[18:0], playerX[19]};
 				
-			else if(btnL && ~btnR)
-				playerX <= {playerX[0], playerX[14:1]};
+			else if(btnL && ~btnR && ~playerX[0])
+				playerX <= {playerX[0], playerX[19:1]};
 				
-			if (((playerX & row13) && (playerY[13] && (CounterY[9:5] == 13))) != 0)
+			if (((playerX & row13) && playerY[13]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row12) && (playerY[12] && (CounterY[9:5] == 12))) != 0)
+			else if (((playerX & row12) && playerY[12]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row11) && (playerY[11] && (CounterY[9:5] == 11))) != 0)
+			else if (((playerX & row11) && playerY[11]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row10) && (playerY[10] && (CounterY[9:5] == 14))) != 0)
+			else if (((playerX & row10) && playerY[10]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row9) && (playerY[9] && (CounterY[9:5] == 9))) != 0)
+			else if (((playerX & row9) && playerY[9]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row8) && (playerY[8] && (CounterY[9:5] == 8))) != 0)
+			else if (((playerX & row8) && playerY[8]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row7) && (playerY[7] && (CounterY[9:5] == 7))) != 0)
+			else if (((playerX & row6) && playerY[6]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row6) && (playerY[6] && (CounterY[9:5] == 6))) != 0)
+			else if (((playerX & row5) && playerY[5]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row5) && (playerY[5] && (CounterY[9:5] == 5))) != 0)
+			else if (((playerX & row4) && playerY[4]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row4) && (playerY[4] && (CounterY[9:5] == 4))) != 0)
+			else if (((playerX & row3) && playerY[3]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row3) && (playerY[3] && (CounterY[9:5] == 3))) != 0)
+			else if (((playerX & row2) && playerY[2]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row2) && (playerY[2] && (CounterY[9:5] == 2))) != 0)
+			else if (((playerX & row1) && playerY[1]) != 0)
 				begin
 					playerX <= 20'b00000000001000000000;
 					playerY <= 15'b100000000000000;
 				end
-			else if (((playerX & row1) && (playerY[1] && (CounterY[9:5] == 1))) != 0)
+			else if(win)
 				begin
-					playerX <= 20'b00000000001000000000;
-					playerY <= 15'b100000000000000;
+					win0 <= 20'b00000000000000000000;
+					win1 <= 20'b01000100011100100010;
+					win2 <= 20'b01000100100010010100;
+					win3 <= 20'b01000101000001001000;
+					win4 <= 20'b01000101000001001000;
+					win5 <= 20'b01000100100010001000;
+					win6 <= 20'b00111000011100001000;
+					win7 <= 20'b00000000000000000000;
+					win8 <= 20'b00000000000000000000;
+					win9 <= 20'b01001011101000000010;
+					win10 <= 20'b01011001001000100010;
+					win11 <= 20'b01111001000100100100;
+					win12 <= 20'b01101001000101010100;
+					win13 <= 20'b01001011100010001000;
+					win14 <= 20'b00000000000000000000;
 				end
-
-			
 		end
 
 	wire R = (CounterY[9:5]==1 && row1[CounterX[9:5]]) || (CounterY[9:5]==2 && row2[CounterX[9:5]]) ||
@@ -247,8 +279,17 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	(CounterY[9:5]==9 && row9[CounterX[9:5]]) || (CounterY[9:5]==10 && row10[CounterX[9:5]]) ||
 	(CounterY[9:5]==11 && row11[CounterX[9:5]]) || (CounterY[9:5]==12 && row12[CounterX[9:5]]) ||
 	(CounterY[9:5]==13 && row13[CounterX[9:5]]);
-	wire G = playerX[CounterX[9:5]] && playerY[CounterY[9:5]];
-	wire B = 0;
+	
+	wire G = (playerX[CounterX[9:5]] && playerY[CounterY[9:5]]);
+	
+	wire B = (CounterY[9:5]==0 && win0[CounterX[9:5]]) || (CounterY[9:5]==14 && win14[CounterX[9:5]]) ||
+	(CounterY[9:5]==1 && win1[CounterX[9:5]]) || (CounterY[9:5]==2 && win2[CounterX[9:5]]) ||
+	(CounterY[9:5]==3 && win3[CounterX[9:5]]) || (CounterY[9:5]==4 && win4[CounterX[9:5]]) ||
+	(CounterY[9:5]==5 && win5[CounterX[9:5]]) || (CounterY[9:5]==6 && win6[CounterX[9:5]]) ||
+	(CounterY[9:5]==7 && win7[CounterX[9:5]]) || (CounterY[9:5]==8 && win8[CounterX[9:5]]) ||
+	(CounterY[9:5]==9 && win9[CounterX[9:5]]) || (CounterY[9:5]==10 && win10[CounterX[9:5]]) ||
+	(CounterY[9:5]==11 && win11[CounterX[9:5]]) || (CounterY[9:5]==12 && win12[CounterX[9:5]]) ||
+	(CounterY[9:5]==13 && win13[CounterX[9:5]]);
 	
 	always @(posedge clk)
 	begin
@@ -350,25 +391,3 @@ module vga_demo(ClkPort, vga_h_sync, vga_v_sync, vga_r, vga_g, vga_b, Sw0, Sw1, 
 	//////////////  	  SSD control ends here 	 ///////////////////
 	/////////////////////////////////////////////////////////////////
 endmodule
-
-// module function_example ();
- 
-//   reg r_Bit1=1'b1, r_Bit2=1'b0, r_Bit3=1'b1;
-//   wire w_Result;
-//   reg  r_Global;
- 
-//   function do_math;
-//     input i_bit1, i_bit2, i_bit3; 
-//     reg   v_Temp; // Local Variable
-//     begin
-//       // Demonstrates driving external Global Reg
-//       r_Global = 1'b1; 
-       
-//       v_Temp  = (i_bit1 & i_bit2);
-//       do_math = (v_Temp | i_bit3);
-//     end
-//   endfunction
- 
-//   assign w_Result = do_math(r_Bit1, r_Bit2, r_Bit3);
- 
-// endmodule
